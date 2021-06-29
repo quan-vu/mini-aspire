@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+
+    mysql:
+        image: mysql:8.0
+        ports:
+            - 33061:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: "secret"
+            MYSQL_DATABASE: "${DB_DATABASE}"
+            MYSQL_USER: "${DB_USERNAME}"
+            MYSQL_PASSWORD: "${DB_PASSWORD}"
+        volumes: 
+            - ./docker/mysql:/docker-entrypoint-initdb.d
+        networks: 
+            - mini-aspire
+
+    laravel:
+        image: "${COMPOSE_PROJECT_NAME}_laravel:1.0.0"
+        container_name: "${COMPOSE_PROJECT_NAME}_laravel"
+        build:
+            context: .
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - mysql
+        networks: 
+            - mini-aspire
+
+    nginx:
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - "${APP_PORT:-80}:80"
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx:/etc/nginx/conf.d
+        depends_on: 
+            - laravel
+        networks:
+            - mini-aspire
+            
+networks:
+    mini-aspire:
+        name: mini-aspire
+        driver: bridge
