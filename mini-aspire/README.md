@@ -14,3 +14,15 @@ make migrate
 # Step 3: Install passport
 make exec cmd="php artisan passport:install"
 ```
+
+## Production
+
+For the first time, deploy application to production we need to passport generate access tokens.
+
+```shell
+# Use Makefile
+make generate-key
+
+# Run in laravel docker container
+php artisan passport:keys
+```

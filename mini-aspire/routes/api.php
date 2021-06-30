@@ -15,10 +15,6 @@ use App\Http\Controllers\API\V1\AuthController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
     // Public
@@ -33,6 +29,16 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
         Route::group(['prefix' => 'auth'], function() {
             Route::get('user', 'AuthController@user');
             Route::post('logout', 'AuthController@logout');
+        });
+
+        Route::group(['prefix' => 'loans'], function() {
+            Route::post('', 'LoanController@create');
+            Route::put('', 'LoanController@update');
+            Route::get('/{id}', 'LoanController@detail');
+        });
+
+        Route::group(['prefix' => 'repayments'], function() {
+            Route::put('/{id}', 'RepaymentController@update');
         });
    });
    
