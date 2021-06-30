@@ -40,8 +40,8 @@ class LoanRepository extends BaseRepository
 
     public function create($data)
     {
-        $query = $this->model->newQuery();
-        $loan = $query->create($data);
+        $loan = $this->model->create($data);
+        
         return $loan;
     }
 }

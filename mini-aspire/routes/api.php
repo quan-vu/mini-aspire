@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\V1\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +13,10 @@ use App\Http\Controllers\API\V1\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/', function (Request $request) {
+    return 'PONG';
+});
 
 Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
@@ -32,13 +35,14 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
         });
 
         Route::group(['prefix' => 'loans'], function() {
-            Route::post('', 'LoanController@create');
-            Route::put('', 'LoanController@update');
+            Route::post('/', 'LoanController@create');
+            Route::put('/', 'LoanController@update');
             Route::get('/{id}', 'LoanController@detail');
         });
 
-        Route::group(['prefix' => 'repayments'], function() {
-            Route::put('/{id}', 'RepaymentController@update');
+        Route::group(['prefix' => '/user'], function() {
+            Route::get('/loans', 'UserController@userLoans');
+            Route::put('/make_repayment/{id}', 'UserController@makeRepayment');
         });
    });
    

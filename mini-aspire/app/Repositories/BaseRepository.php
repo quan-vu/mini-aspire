@@ -56,12 +56,21 @@ abstract class BaseRepository
     /**
      * Paginate records for scaffold.
      *
-     * @param  int  $perPage
+     * @param  int  $pageSize
      * @param  array  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage, $columns = ['*'], $orderBy='id', $sortBy='asc', $searchBy=NULL, $filterWhere=NULL)
+    public function paginate($filter)
     {
+        $pageSize   = !empty($filter['page_size']) ? $filter['page_size'] : 10;
+        $pageNo     = !empty($filter['page']) ? $filter['page'] : 1;
+        $orderBy    = !empty($filter['order_by']) ? $filter['order_by'] : 'id';
+        $sortBy     = !empty($filter['sort']) ? $filter['sort'] : 'asc';
+        $searchBy   = !empty($filter['search_by']) ? $filter['search_by'] : null;
+        $filterWhere = !empty($filter['condition']) ? $filter['condition'] : null;
+        $relations = !empty($filter['relations']) ? $filter['relations'] : null;
+        $columns    = !empty($filter['columns']) ? $filter['columns'] : '*';
+
         $query = $this->allQuery();
         $where = [];
         $orWhere = [];
@@ -90,9 +99,15 @@ abstract class BaseRepository
             }
         }
 
-        if(!empty($filterWhere)){
+        if($filterWhere){
             foreach($filterWhere as $field => $value){
                 array_push($where, [$field, $value]);
+            }
+        }
+
+        if($relations){
+            foreach($relations as $relation){
+                $query->with($relation);
             }
         }
 
@@ -102,7 +117,7 @@ abstract class BaseRepository
             $query->orWhere($orWhere);
         }
 
-        return $query->orderBy($orderBy, $sortBy)->paginate($perPage, $columns);
+        return $query->orderBy($orderBy, $sortBy)->paginate($pageSize, $columns);
     }
 
     /**
@@ -199,12 +214,12 @@ abstract class BaseRepository
     /**
      * Update model record for given id
      *
-     * @param  array  $input
      * @param  int  $id
+     * @param  array  $input
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
-    public function update($input, $id)
+    public function update($id, $input)
     {
         $query = $this->model->newQuery();
 

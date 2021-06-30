@@ -19,6 +19,8 @@ class Repayment extends Model
         'amount',
         'pay_date',
         'paid',
+        'paid_date',
+        'paid_amount'
     ];
 
     /**
@@ -31,5 +33,6 @@ class Repayment extends Model
         'amount' => 'double',
         'pay_date' => 'date',
         'paid' => 'boolean',
+        'paid_date' => 'datetime',
     ];
 }

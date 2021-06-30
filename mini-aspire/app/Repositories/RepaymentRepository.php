@@ -42,7 +42,6 @@ class RepaymentRepository extends BaseRepository
     /**
      * Create list of repayment for a loan
     */
-
     public function createForLoan(Loan $loan)
     {
         $query = $this->model->newQuery();
@@ -59,6 +58,21 @@ class RepaymentRepository extends BaseRepository
         $repayments = DB::table('repayments')->upsert($repaymentList, $condition, $updateFields);
         return $repayments;
         return $repaymentList;
+    }
+
+    /**
+     * Get repayment by user
+    */
+    public function getByUser($userId, $id)
+    {
+        $repayment = DB::table('repayments')
+            ->select('repayments.*')
+            ->join('loans', 'loans.id', '=', 'repayments.loan_id')
+            ->where('loans.user_id', $userId)
+            ->where('repayments.id', $id)
+            ->first();
+
+        return $repayment;
     }
 
     private function _generateRepaymentList($loan)
