@@ -85,7 +85,9 @@ class AuthController extends BaseAdminController
         try {
             $user = $request->user();
             $input = $request->validated();
-            
+            if(!empty($input['password'])){
+                $input['password'] = Hash::make($input['password']);
+            }
             $user = $this->_adminRepo->update($user->id, $input);
             return $this->success('Update profile successfully.', $user);
         } catch (\Throwable $th) {
