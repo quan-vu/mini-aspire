@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\API\V1\LoanCreateAPIRequest;
 use App\Repositories\LoanRepository;
@@ -38,7 +39,7 @@ class LoanController extends BaseController
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Get detail by id.
      */
     protected function detail($id)
     {

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\API\Admin;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RepaymentsResource extends ResourceCollection
+class LoansResource extends ResourceCollection
 {
     /**
      * The resource that this resource collects.
      *
      * @var string
      */
-    public $collects = 'App\Http\Resources\RepaymentResource';
+    public $collects = 'App\Http\Resources\API\Admin\LoanResource';
 
     /**
      * Transform the resource collection into an array.

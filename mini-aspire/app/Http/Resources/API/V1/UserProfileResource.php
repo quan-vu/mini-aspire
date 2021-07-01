@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\API\V1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RepaymentResource extends JsonResource
+class UserProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,9 @@ class RepaymentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'loan_id' => $this->loan_id,
-            'amount' => $this->amount,
-            'pay_date' => $this->pay_date,
-            'paid' => $this->paid,
-            'currency' => $this->currency,
+            'email' => $this->email,
+            'name' => $this->name,
+            'is_verified_email' => $this->email_verified_at ? TRUE : FALSE
         ];
     }
 }

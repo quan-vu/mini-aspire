@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\API\V1\UserSignupAPIRequest;
 use App\Http\Requests\API\V1\UserLoginAPIRequest;
-use App\Http\Resources\AuthUserResource;
-
 use App\Models\User;
 
 class AuthController extends BaseController
@@ -94,16 +92,6 @@ class AuthController extends BaseController
             // throw $th;
             return $this->error('Error when logging out!', 500);
         }
-    }
-
-    /**
-     * Retrieve authenticated user
-     *
-     * @return [Object] User
-     */
-    public function user(Request $request)
-    {
-        return $this->success('Retrieve user successfully.', new AuthUserResource($request->user()));
     }
 
 }

@@ -9,6 +9,7 @@ use App\Repositories\RepaymentRepository;
 use App\Repositories\LoanRepository;
 use App\Http\Resources\LoansResource;
 use App\Http\Requests\API\V1\UserRepaymentAPIRequest;
+use App\Http\Resources\API\V1\UserProfileResource;
 
 class UserController extends BaseController
 {
@@ -23,8 +24,19 @@ class UserController extends BaseController
         $this->_repaymentRepo = $repaymentRepo;
     }
 
+
     /**
-     * Create a new user instance after a valid registration.
+     * Retrieve authenticated user
+     *
+     * @return object User
+     */
+    public function profile(Request $request)
+    {
+        return $this->success('Retrieve user successfully.', new UserProfileResource($request->user()));
+    }
+
+    /**
+     * Get user's loans.
      */
     protected function userLoans(Request $request)
     {
@@ -84,5 +96,6 @@ class UserController extends BaseController
             return $this->error("Something when wrong!", 500);
         }
     }
+    
 
 }

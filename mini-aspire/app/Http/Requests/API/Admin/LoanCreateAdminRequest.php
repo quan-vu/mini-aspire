@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\API\V1;
+namespace App\Http\Requests\API\Admin;
 
 use App\Http\Requests\API\BaseAPIRequest;
 
-class LoanCreateAPIRequest extends BaseAPIRequest
+class LoanCreateAdminRequest extends BaseAPIRequest
 {
     /**
      * Determine if the user is authorized to make this request.

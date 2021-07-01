@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Response;
 
-class BaseController extends Controller
+class BaseAdminController extends Controller
 {
     public function error($error, $code = 404)
     {
@@ -28,6 +28,7 @@ class BaseController extends Controller
     {
         // Re format pagination struct
         $data = null;
+        $resourceCollectionInstance = "\\App\\Http\\Resources\\API\\Admin\\$resourceCollection";;
         if ($pagination instanceof \Illuminate\Pagination\LengthAwarePaginator) {
             $data = [
                 'current_page' => (int) $pagination->currentPage(),
@@ -36,12 +37,9 @@ class BaseController extends Controller
                 'total' => (int) $pagination->total(),
                 'prev_page_url' => $pagination->previousPageUrl(),
                 'next_page_url' => $pagination->nextPageUrl(),
-                'items' => new $resourceCollection($pagination->items()),
+                'items' => new $resourceCollectionInstance($pagination->items()),
             ];
         }
-
-        // $pagination['items'] = $pagination->items();
-        // unset($pagination['data']);
 
         return Response::json([
             'success' => true,
