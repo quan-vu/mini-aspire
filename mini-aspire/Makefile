@@ -27,8 +27,17 @@ generate-key:
 migrate:
 	docker-compose exec ${LARAVEL_APP} php artisan migrate
 
+migration:
+	docker-compose exec ${LARAVEL_APP} php artisan make:migration $$name
+
 rollback:
 	docker-compose exec ${LARAVEL_APP} php artisan migrate:rollback
+
+seed-db:
+	docker-compose exec ${LARAVEL_APP} php artisan db:seed
+
+seed-class:
+	docker-compose exec ${LARAVEL_APP} php artisan db:seed --class=$$name
 
 composer-install:
 	docker-compose exec ${LARAVEL_APP} composer install
