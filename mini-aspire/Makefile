@@ -6,9 +6,6 @@ export LARAVEL_APP=laravel
 exec:
 	docker-compose exec ${LARAVEL_APP} $$cmd
 
-setup:
-	php artisan passport:install
-
 build:
 	docker-compose build
 
@@ -21,14 +18,17 @@ stop:
 clean:
 	docker-compose down -v
 
-generate-key:
-	@php artisan key:generate --ansi
-
 migrate:
 	docker-compose exec ${LARAVEL_APP} php artisan migrate
 
+migrate-test:
+	docker-compose exec ${LARAVEL_APP} php artisan migrate --env=testing
+
 migration:
 	docker-compose exec ${LARAVEL_APP} php artisan make:migration $$name
+
+refresh:
+	docker-compose exec ${LARAVEL_APP} php artisan migrate:refresh --seed
 
 rollback:
 	docker-compose exec ${LARAVEL_APP} php artisan migrate:rollback
@@ -39,6 +39,13 @@ seed-db:
 seed-class:
 	docker-compose exec ${LARAVEL_APP} php artisan db:seed --class=$$name
 
+init:
+	docker-compose exec ${LARAVEL_APP} php artisan key:generate
+	docker-compose exec ${LARAVEL_APP} php artisan passport:install
+
+verify:
+	curl --location --request GET 'http://localhost:8001/'
+
 composer-install:
 	docker-compose exec ${LARAVEL_APP} composer install
 
@@ -47,3 +54,14 @@ composer-dump:
 
 composer-require:
 	docker-compose exec ${LARAVEL_APP} composer require $$name
+
+test-init:
+	docker-compose exec ${LARAVEL_APP} php artisan migrate:refresh --seed --env=testing
+	docker-compose exec ${LARAVEL_APP} php artisan passport:install --env=testing
+
+test: 
+	docker-compose exec ${LARAVEL_APP} php artisan config:clear  --env=testing
+	docker-compose exec ${LARAVEL_APP} php artisan test --testsuite=Feature --stop-on-failure
+
+test-feature:
+	docker-compose exec ${LARAVEL_APP} php artisan make:test $$name

@@ -11,7 +11,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.', 'namespace' => 'V1'], function ()
     // Public
     Route::group(['prefix' => 'auth'], function() {
         Route::post('signup', 'AuthController@signup');
-        Route::post('login', 'AuthController@login');
+        Route::post('login', 'AuthController@login')->name('auth.login');
     });
 
     // Authenticated
