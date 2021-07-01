@@ -51,6 +51,11 @@ class UserController extends BaseAdminController
     {
         try {
             $input = $request->validated();
+
+            $user = $this->_userRepo->findWhere(['email' => $input['email']])->first();
+            if($user){
+                return $this->error("Email ".$input['email']." is already exist!", 409);
+            }
             $user = $this->_userRepo->create($input);
             return $this->success("Create user successfully.", new UserResource($user), 201); 
         } catch (\Exception $e) {
@@ -69,6 +74,11 @@ class UserController extends BaseAdminController
 
             if(!empty($input['password'])){
                 $input['password'] = Hash::make($input['password']);
+            }
+
+            $user = $this->_userRepo->find($id);
+            if(! $user){
+                return $this->error("User not found!", 404);
             }
 
             $user = $this->_userRepo->update($id, $input);

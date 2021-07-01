@@ -8,23 +8,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\API\BaseAdminController;
-use App\Http\Requests\API\Admin\UserSignupAdminRequest;
-use App\Http\Requests\API\Admin\UserLoginAdminRequest;
-use App\Http\Resources\API\Admin\AuthUserResource;
-
-use App\Models\User;
+use App\Http\Requests\API\Admin\LoginAdminRequest;
+use App\Http\Requests\API\Admin\UpdateAdminRequest;
+use App\Http\Resources\API\Admin\AuthAdminResource;
+use App\Repositories\Admin\AdminRepository;
 
 class AuthController extends BaseAdminController
 {
-    public function __construct() {}
+    private $_adminRepo;
 
-    public function login(UserLoginAdminRequest $request)
+    public function __construct(
+        AdminRepository $adminRepo
+    ) {
+        $this->_adminRepo = $adminRepo;
+    }
+
+    public function login(LoginAdminRequest $request)
     {
         $input = $request->validated();
             
-        $user = User::where('email', $input['email'])->first();
-        if($user)
-        {
+        $user = $this->_adminRepo->findWhere(['email' => $input['email']])->first();
+        if($user){
             if (! Hash::check($input['password'], $user->password))
             {
                 return response()->json([
@@ -64,11 +68,31 @@ class AuthController extends BaseAdminController
     /**
      * Retrieve authenticated user
      *
-     * @return [Object] User
+     * @return [Object] Admin
      */
     public function user(Request $request)
     {
-        return $this->success('Retrieve user successfully.', new AuthUserResource($request->user()));
+        return $this->success('Retrieve user successfully.', new AuthAdminResource($request->user()));
+    }
+
+    /**
+     * Retrieve authenticated user
+     *
+     * @return [Object] Admin
+     */
+    public function update(UpdateAdminRequest $request)
+    {
+        try {
+            $user = $request->user();
+            $input = $request->validated();
+            
+            $user = $this->_adminRepo->update($user->id, $input);
+            return $this->success('Update profile successfully.', $user);
+        } catch (\Throwable $th) {
+            // throw $th;
+            return $this->error('Error when logging out!', 500);
+        }
+        return $this->success('Retrieve user successfully.', new AuthAdminResource($request->user()));
     }
 
 }

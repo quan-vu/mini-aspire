@@ -15,10 +15,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], fu
     });
 
     // Authenticated
-    Route::group(['middleware' => ['auth:api'] ], function() {
+    Route::group(['middleware' => ['auth:admin'] ], function() {
 
         Route::group(['prefix' => 'auth'], function() {
             Route::get('profile', 'AuthController@user');
+            Route::put('profile', 'AuthController@update');
             Route::post('logout', 'AuthController@logout');
         });
 

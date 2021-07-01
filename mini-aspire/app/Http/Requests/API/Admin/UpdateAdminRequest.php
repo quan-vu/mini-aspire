@@ -4,7 +4,7 @@ namespace App\Http\Requests\API\Admin;
 
 use App\Http\Requests\API\BaseAPIRequest;
 
-class UserLoginAdminRequest extends BaseAPIRequest
+class UpdateAdminRequest extends BaseAPIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +24,9 @@ class UserLoginAdminRequest extends BaseAPIRequest
     public function rules()
     {
         return [
-            'email' => 'required',
-            'password'  => 'required',
+            'name' => 'min:2|max:100',
+            'password'  => 'min:5',
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'email.required' => 'Email is required!',
-            'password.required' => 'Password is required!',
-        ];
-    }
 }
