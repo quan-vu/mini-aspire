@@ -5,61 +5,86 @@ namespace Tests;
 use Tests\TestCase;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class BaseTestCase extends TestCase
 {
-    // use CreatesApplication;
 
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
+    protected function getManagerUser()
     {
-        return self::initialize();
+        $user = User::updateOrCreate(
+            ['email' => 'manager@example.com', ],
+            [
+                'name' => 'Manager', 
+                'email' => 'manager@example.com', 
+                'email_verified_at' => null, 
+                'password' => Hash::make('password'), 
+                'remember_token' => null,
+            ]
+        );
+
+        $user->assignRole('manager');
+
+        $accessToken = $user->createToken('Personal Access Token')->accessToken;
+
+        return [$user, $accessToken];
     }
 
-    private static $configurationApp = null;
+    protected function getEmployeeUser()
+    {
+        $user = User::updateOrCreate(
+            ['email' => 'empoyee@example.com', ],
+            [
+                'name' => 'Employee', 
+                'email' => 'empoyee@example.com', 
+                'email_verified_at' => null, 
+                'password' => Hash::make('password'), 
+                'remember_token' => null,
+            ]
+        );
 
-    public static function initialize(){
+        $user->assignRole('empoyee');
 
-        if(is_null(self::$configurationApp)){
-            $app = require __DIR__.'/../bootstrap/app.php';
-            $app->loadEnvironmentFrom('.env.testing');
-            $app->make(Kernel::class)->bootstrap();
+        $accessToken = $user->createToken('Personal Access Token')->accessToken;
 
-            Artisan::call('migrate');
-            Artisan::call('db:seed');
-
-            self::$configurationApp = $app;
-            
-            return $app;
-        }
-
-        return self::$configurationApp;
+        return [$user, $accessToken];
     }
 
-    // public function tearDown()
-    // {
-    //     if ($this->app) {
-    //         foreach ($this->beforeApplicationDestroyedCallbacks as $callback) {
-    //             call_user_func($callback);
-    //         }
+    protected function getUser1()
+    {
+        $user = User::updateOrCreate(
+            ['email' => 'user1@example.com', ],
+            [
+                'name' => 'User 1', 
+                'email' => 'user1@example.com', 
+                'email_verified_at' => null, 
+                'password' => Hash::make('password1'), 
+                'remember_token' => null,
+            ]
+        );
 
-    //     }
+        $tokenResult = $user->createToken('Personal Access Token');
 
-    //     $this->setUpHasRun = false;
+        return [$user, $tokenResult->accessToken];
+    }
 
-    //     if (property_exists($this, 'serverVariables')) {
-    //         $this->serverVariables = [];
-    //     }
+    protected function getUser2()
+    {
+        $user = User::updateOrCreate(
+            ['email' => 'user2@example.com', ],
+            [
+                'name' => 'User 2', 
+                'email' => 'user2@example.com', 
+                'email_verified_at' => null, 
+                'password' => Hash::make('password2'), 
+                'remember_token' => null,
+            ]
+        );
 
-    //     if (class_exists('Mockery')) {
-    //         Mockery::close();
-    //     }
+        $accessToken = $user->createToken('Personal Access Token')->accessToken;
 
-    //     $this->afterApplicationCreatedCallbacks = [];
-    //     $this->beforeApplicationDestroyedCallbacks = [];
-    // }
+        return [$user, $accessToken];
+    }
+    
 }
