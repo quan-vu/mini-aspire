@@ -71,6 +71,6 @@ test-unit:
 	docker-compose exec ${LARAVEL_APP} php artisan config:clear --env=testing
 	docker-compose exec ${LARAVEL_APP} php artisan test --testsuite=Unit --stop-on-failure
 
-test-class:
+test-filter:
 	docker-compose exec ${LARAVEL_APP} php artisan config:clear --env=testing
 	docker-compose exec ${LARAVEL_APP} php artisan test --filter=$$name

@@ -11,7 +11,7 @@ class RepaymentsResource extends ResourceCollection
      *
      * @var string
      */
-    public $collects = 'App\Http\Resources\RepaymentResource';
+    public $collects = 'App\Http\Resources\API\V1\RepaymentResource';
 
     /**
      * Transform the resource collection into an array.

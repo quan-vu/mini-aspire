@@ -28,6 +28,7 @@ class BaseController extends Controller
     {
         // Re format pagination struct
         $data = null;
+        $resourceCollectionInstance = "\\App\\Http\\Resources\\API\\V1\\$resourceCollection";
         if ($pagination instanceof \Illuminate\Pagination\LengthAwarePaginator) {
             $data = [
                 'current_page' => (int) $pagination->currentPage(),
@@ -36,7 +37,7 @@ class BaseController extends Controller
                 'total' => (int) $pagination->total(),
                 'prev_page_url' => $pagination->previousPageUrl(),
                 'next_page_url' => $pagination->nextPageUrl(),
-                'items' => new $resourceCollection($pagination->items()),
+                'items' => new $resourceCollectionInstance($pagination->items()),
             ];
         }
 

@@ -7,13 +7,21 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Admin;
 
 class BaseTestCase extends TestCase
 {
+    public function test_api_root()
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200)
+            ->assertSee('PONG');
+    }
 
     protected function getManagerUser()
     {
-        $user = User::updateOrCreate(
+        $user = Admin::updateOrCreate(
             ['email' => 'manager@example.com', ],
             [
                 'name' => 'Manager', 
@@ -33,7 +41,7 @@ class BaseTestCase extends TestCase
 
     protected function getEmployeeUser()
     {
-        $user = User::updateOrCreate(
+        $user = Admin::updateOrCreate(
             ['email' => 'empoyee@example.com', ],
             [
                 'name' => 'Employee', 
@@ -44,7 +52,7 @@ class BaseTestCase extends TestCase
             ]
         );
 
-        $user->assignRole('empoyee');
+        $user->assignRole('employee');
 
         $accessToken = $user->createToken('Personal Access Token')->accessToken;
 
@@ -85,6 +93,11 @@ class BaseTestCase extends TestCase
         $accessToken = $user->createToken('Personal Access Token')->accessToken;
 
         return [$user, $accessToken];
+    }
+
+    protected function getResponseData($response)
+    {
+        return json_decode($response->getContent(), true);
     }
     
 }

@@ -28,9 +28,11 @@ class AuthController extends BaseAdminController
         $input = $request->validated();
             
         $user = $this->_adminRepo->findWhere(['email' => $input['email']])->first();
-        if($user){
-            if (! Hash::check($input['password'], $user->password))
-            {
+        if(! $user){
+            return $this->error("User not found!", 404);
+        } else {
+
+            if (! Hash::check($input['password'], $user->password)){
                 return response()->json([
                     'message' => 'Email or password is incorrect!'
                 ], 403);

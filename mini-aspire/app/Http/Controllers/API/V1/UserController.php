@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController;
 use App\Repositories\RepaymentRepository;
 use App\Repositories\LoanRepository;
-use App\Http\Resources\LoansResource;
 use App\Http\Requests\API\V1\UserRepaymentAPIRequest;
 use App\Http\Resources\API\V1\UserProfileResource;
+use App\Http\Resources\API\V1\LoansResource;
+use App\Http\Resources\API\V1\RepaymentResource;
 
 class UserController extends BaseController
 {
@@ -79,7 +80,7 @@ class UserController extends BaseController
             }
 
             if($userRepayment->paid) {
-                return $this->success("Repayment is paid already.", $userRepayment);
+                return $this->success("Repayment is paid already.", new RepaymentResource($userRepayment));
             }
 
             $data = [
@@ -90,7 +91,7 @@ class UserController extends BaseController
             
             $userRepayment = $this->_repaymentRepo->update($id, $data);
 
-            return $this->success("Make repayment successfully.", $userRepayment); 
+            return $this->success("Make repayment successfully.", new RepaymentResource($userRepayment)); 
         } catch (\Exception $e) {
             throw $e;
             return $this->error("Something when wrong!", 500);

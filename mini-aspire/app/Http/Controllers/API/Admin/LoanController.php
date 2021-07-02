@@ -48,7 +48,6 @@ class LoanController extends BaseAdminController
         try {
             $input = $request->validated();
             $loan = $this->_loanRepo->create($input);
-            $this->_repaymentRepo->createForLoan($loan);
             return $this->success("Create loan successfully.", new LoanResource($loan), 201); 
         } catch (\Exception $e) {
             throw $e;

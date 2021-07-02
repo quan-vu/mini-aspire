@@ -11,7 +11,7 @@ class LoansResource extends ResourceCollection
      *
      * @var string
      */
-    public $collects = 'App\Http\Resources\LoanResource';
+    public $collects = 'App\Http\Resources\API\V1\LoanResource';
 
     /**
      * Transform the resource collection into an array.

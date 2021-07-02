@@ -20,7 +20,8 @@ class Repayment extends Model
         'pay_date',
         'paid',
         'paid_date',
-        'paid_amount'
+        'paid_amount',
+        'currency'
     ];
 
     /**
@@ -34,5 +35,6 @@ class Repayment extends Model
         'pay_date' => 'date',
         'paid' => 'boolean',
         'paid_date' => 'datetime',
+        'currency' => 'string',
     ];
 }

@@ -55,7 +55,7 @@ make test-unit
 make test-unit
 
 # Run test for one class only
-make test-class name=UserTest
+make test-filter name=UserTest
 ```
 
 ## Production
