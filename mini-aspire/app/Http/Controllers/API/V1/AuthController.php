@@ -56,8 +56,9 @@ class AuthController extends BaseController
         $input = $request->validated();
             
         $user = User::where('email', $input['email'])->first();
-        if($user)
-        {
+        if(! $user){
+            return $this->error("User not found!", 404);
+        } else {
             if (! Hash::check($input['password'], $user->password))
             {
                 return response()->json([
