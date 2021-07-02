@@ -20,6 +20,16 @@ make init
 make verify
 ```
 
+Useful composer commands
+
+```shell
+# Composer dump
+make composer-dump
+
+# Install a package
+make composer-require name=<package_name>
+```
+
 ## Testing
 
 Start the testing environment
@@ -30,6 +40,22 @@ make test-init
 
 # Step 2: Run the testing
 make test
+```
+
+Useful test commands
+
+```shell
+# Run all test 
+make test
+
+# Run test feature only
+make test-unit
+
+# Run test unit only
+make test-unit
+
+# Run test for one class only
+make test-class name=UserTest
 ```
 
 ## Production

@@ -60,8 +60,17 @@ test-init:
 	docker-compose exec ${LARAVEL_APP} php artisan passport:install --env=testing
 
 test: 
-	docker-compose exec ${LARAVEL_APP} php artisan config:clear  --env=testing
+	docker-compose exec ${LARAVEL_APP} php artisan config:clear --env=testing
+	docker-compose exec ${LARAVEL_APP} php artisan test --stop-on-failure
+
+test-feature: 
+	docker-compose exec ${LARAVEL_APP} php artisan config:clear --env=testing
 	docker-compose exec ${LARAVEL_APP} php artisan test --testsuite=Feature --stop-on-failure
 
-test-feature:
-	docker-compose exec ${LARAVEL_APP} php artisan make:test $$name
+test-unit: 
+	docker-compose exec ${LARAVEL_APP} php artisan config:clear --env=testing
+	docker-compose exec ${LARAVEL_APP} php artisan test --testsuite=Unit --stop-on-failure
+
+test-class:
+	docker-compose exec ${LARAVEL_APP} php artisan config:clear --env=testing
+	docker-compose exec ${LARAVEL_APP} php artisan test --filter=$$name
